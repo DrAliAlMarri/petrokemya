@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PETROKEMYA · Workforce Development North</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -283,6 +284,13 @@ body::after{
   color:var(--head);letter-spacing:-.02em;
 }
 .sec-h2 span{color:var(--cyan)}
+.sec-h2-en{
+  display:block;font-family:var(--mono);font-size:.85rem;font-weight:400;
+  color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.35rem;
+}
+[lang="en"]{font-family:var(--mono)}
+.bi{display:flex;flex-direction:column;gap:.15rem}
+.bi .en{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.04em;font-weight:400}
 .sec-tag{
   font-family:var(--mono);font-size:.68rem;
   color:var(--muted);letter-spacing:.1em;text-transform:uppercase;
@@ -478,6 +486,42 @@ body::after{
   gap:2rem;
   align-items:start;
 }
+.profile-layout{ grid-template-areas: "card thesis" "card ach"; }
+.p-card{ grid-area: card; }
+.thesis-box{ grid-area: thesis; }
+.ach-list{ grid-area: ach; }
+
+/* Thesis box */
+.thesis-box{
+  border:1px solid var(--cyan-line);
+  background:linear-gradient(180deg, var(--cyan-dim), transparent);
+  padding:1.75rem;
+  margin-bottom:2rem;
+}
+.thesis-label{
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.14em;
+  color:var(--cyan);margin-bottom:1rem;text-transform:uppercase;
+}
+.thesis-title-ar{
+  font-size:1rem;font-weight:600;color:var(--white);
+  line-height:1.9;margin-bottom:1rem;
+}
+.thesis-divider{height:1px;background:var(--rule);margin:1rem 0}
+.thesis-title-en{
+  font-family:var(--mono);font-size:.74rem;color:var(--ghost);
+  line-height:1.85;letter-spacing:.01em;text-align:left;direction:ltr;
+}
+.thesis-tags{
+  display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;
+  margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--rule);
+}
+.t-tag{
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.04em;
+  padding:.35rem .8rem;border:1px solid var(--rule);color:var(--head);
+}
+.t-tag.mediator{border-color:var(--amber-dim);color:var(--amber);background:var(--amber-dim)}
+.t-tag.highlight{border-color:var(--green-dim);color:var(--green);background:var(--green-dim)}
+.t-arrow{color:var(--muted);font-size:.85rem}
 .p-card{
   border:1px solid var(--rule);
   background:var(--ink-2);
@@ -540,8 +584,41 @@ body::after{
 }
 
 /* ──────────────────────────
-   QUOTE STRIP
+   CHARTS / ANALYTICS
 ────────────────────────── */
+.charts-grid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:1px;background:var(--rule);border:1px solid var(--rule);
+  margin-bottom:1px;
+}
+.chart-card{
+  background:var(--ink-2);
+  padding:1.75rem;
+}
+.chart-card.full{grid-column:1 / -1}
+.chart-head{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:1.25rem;padding-bottom:.85rem;border-bottom:1px solid var(--rule);
+}
+.chart-title{font-size:.85rem;font-weight:600;color:var(--head)}
+.chart-title .en{display:block;font-family:var(--mono);font-size:.62rem;color:var(--muted);margin-top:.2rem;font-weight:400;letter-spacing:.06em}
+.chart-tip{font-family:var(--mono);font-size:.6rem;color:var(--muted);text-align:left}
+.chart-box{position:relative;height:280px}
+.chart-box.tall{height:340px}
+
+.toggle-group{display:flex;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.toggle-btn{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.04em;
+  padding:.3rem .8rem;background:var(--ink-2);color:var(--muted);
+  border:none;cursor:pointer;transition:all .15s;
+}
+.toggle-btn.active{background:var(--cyan-dim);color:var(--cyan)}
+.toggle-btn:hover{color:var(--cyan)}
+
+.legend-row{display:flex;flex-wrap:wrap;gap:1rem;margin-top:1rem;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.65rem;color:var(--ghost)}
+.legend-dot{width:9px;height:9px;border-radius:1px}
 .quote-strip{
   position:relative;z-index:1;
   padding:4rem 2.5rem;
@@ -602,7 +679,7 @@ body::after{
   .pillars-grid{grid-template-columns:repeat(3,1fr)}
   .dash-grid{grid-template-columns:1fr 1fr}
   .impact-layout{grid-template-columns:1fr}
-  .profile-layout{grid-template-columns:1fr}
+  .profile-layout{grid-template-columns:1fr;grid-template-areas:"card" "thesis" "ach"}
   .p-card{position:static}
   .roadmap{grid-template-columns:1fr 1fr}
   .roadmap::before{display:none}
@@ -637,6 +714,7 @@ body::after{
     <a href="#roadmap">خارطة الطريق</a>
     <a href="#dashboard">لوحة الأداء</a>
     <a href="#impact">الأثر</a>
+    <a href="#analytics">تحليلات</a>
     <a href="#profile">الملف</a>
   </nav>
   <div class="tb-right">
@@ -675,12 +753,13 @@ body::after{
 <!-- ── HERO ── -->
 <section class="hero" id="hero">
   <div class="hero-left r">
-    <div class="hero-overline">منصب القيادة المستهدف · PETROKEMYA</div>
+    <div class="hero-overline">منصب القيادة المستهدف · Target Leadership Position</div>
     <h1 class="hero-h1">
       منظومة<br>
       <span class="accent">تحول القدرات</span><br>
       البشرية
     </h1>
+    <div style="font-family:var(--mono);font-size:.75rem;color:var(--ghost);letter-spacing:.1em;margin-bottom:1.2rem">HUMAN CAPABILITY TRANSFORMATION SYSTEM</div>
     <div class="hero-role">MANAGER · WORKFORCE DEVELOPMENT NORTH</div>
     <p class="hero-desc">
       رؤية بحثية أكاديمية تُترجم إلى أثر تنظيمي مقاس — منظومة HCTS المتكاملة في ستة محاور،
@@ -750,8 +829,8 @@ body::after{
 <section class="sec sec-alt" id="pillars">
   <div class="wrap">
     <div class="sec-head r">
-      <h2 class="sec-h2">المنظومة المتكاملة <span>· HCTS</span></h2>
-      <div class="sec-tag">Human Capability Transformation System · Six Pillars</div>
+      <h2 class="sec-h2">المنظومة المتكاملة <span>· HCTS</span><span class="sec-h2-en">The Integrated Transformation System</span></h2>
+      <div class="sec-tag">Six Strategic Pillars · ستة محاور استراتيجية متكاملة</div>
     </div>
     <div class="pillars-grid r">
       <div class="pillar">
@@ -798,39 +877,39 @@ body::after{
 <section class="sec" id="roadmap">
   <div class="wrap">
     <div class="sec-head r">
-      <h2 class="sec-h2">خارطة الطريق <span>2026 – 2030</span></h2>
-      <div class="sec-tag">5-Year Executive Roadmap · From Strategy to Execution</div>
+      <h2 class="sec-h2">خارطة الطريق <span>2026 – 2030</span><span class="sec-h2-en">5-Year Executive Roadmap</span></h2>
+      <div class="sec-tag">From Strategy to Execution · من الاستراتيجية إلى التنفيذ</div>
     </div>
     <div class="roadmap r">
       <div class="rm-step">
         <div class="rm-node done">⚡</div>
         <div class="rm-period">DAY 1 – 100</div>
-        <div class="rm-title">Quick Wins<br>100 Day Plan</div>
-        <div class="rm-desc">بناء الأساس وإطلاق المبادرات السريعة · رفع الوعي وبناء الثقة</div>
+        <div class="rm-title">100 Day Plan<br>خطة أول 100 يوم</div>
+        <div class="rm-desc">Build the foundation & launch quick improvements<br>بناء الأساس وإطلاق المبادرات السريعة</div>
       </div>
       <div class="rm-step">
         <div class="rm-node now">🏗️</div>
         <div class="rm-period">JAN – DEC 2026</div>
-        <div class="rm-title">Foundation &<br>Acceleration</div>
-        <div class="rm-desc">تأسيس البنية التحتية · تطوير الكفاءات الحرجة · إطلاق ثقافة التعلم</div>
+        <div class="rm-title">Foundation & Acceleration<br>الأساس والتسريع</div>
+        <div class="rm-desc">Build capability infrastructure & launch culture<br>تأسيس البنية التحتية وإطلاق ثقافة التعلم</div>
       </div>
       <div class="rm-step">
         <div class="rm-node">📈</div>
         <div class="rm-period">2027 – 2028</div>
-        <div class="rm-title">Integration<br>& Scale</div>
-        <div class="rm-desc">تكامل المبادرات على مستوى الشركة · توسيع القيادة والابتكار</div>
+        <div class="rm-title">Integration & Scale<br>التكامل والتوسع</div>
+        <div class="rm-desc">Integrate initiatives & scale impact enterprise-wide<br>تكامل المبادرات وتوسيع الأثر</div>
       </div>
       <div class="rm-step">
         <div class="rm-node">🌟</div>
         <div class="rm-period">2029 – 2030</div>
-        <div class="rm-title">Sustainability<br>& Excellence</div>
-        <div class="rm-desc">ترسيخ الاستدامة · تحقيق التميز التشغيلي والبشري</div>
+        <div class="rm-title">Sustainability & Excellence<br>الاستدامة والتميز</div>
+        <div class="rm-desc">Embed sustainability & achieve excellence<br>ترسيخ الاستدامة وتحقيق التميز</div>
       </div>
       <div class="rm-step" style="border-right:none">
         <div class="rm-node" style="border-color:var(--amber);background:var(--amber-dim)">🏆</div>
         <div class="rm-period">BEYOND 2030</div>
-        <div class="rm-title">Ultimate<br>Outcome</div>
-        <div class="rm-desc">مؤسسة رائدة عالمياً في القدرات البشرية للأجيال القادمة</div>
+        <div class="rm-title">Ultimate Outcome<br>النتيجة النهائية</div>
+        <div class="rm-desc">A leading organization in human capabilities<br>مؤسسة رائدة في القدرات البشرية</div>
       </div>
     </div>
     <div class="rm-kpis r">
@@ -858,8 +937,8 @@ body::after{
 <section class="sec sec-alt" id="dashboard">
   <div class="wrap">
     <div class="sec-head r">
-      <h2 class="sec-h2">لوحة الأداء <span>· Command Center</span></h2>
-      <div class="sec-tag">Capability Command Center · Live KPIs · 21 May 2024</div>
+      <h2 class="sec-h2">لوحة الأداء <span>· Command Center</span><span class="sec-h2-en">Capability Command Center · Live KPIs</span></h2>
+      <div class="sec-tag">21 May 2024 · مؤشرات حية ومتكاملة</div>
     </div>
     <div class="dash-grid r">
 
@@ -961,18 +1040,18 @@ body::after{
 <section class="sec" id="impact">
   <div class="wrap">
     <div class="sec-head r">
-      <h2 class="sec-h2">خارطة الأثر <span>الاستراتيجي</span></h2>
-      <div class="sec-tag">Strategic Impact Map · Inputs → Transformation → Outcomes</div>
+      <h2 class="sec-h2">خارطة الأثر <span>الاستراتيجي</span><span class="sec-h2-en">Strategic Impact Map</span></h2>
+      <div class="sec-tag">Inputs → Transformation → Outcomes · من المدخلات إلى النتائج</div>
     </div>
     <div class="impact-layout r">
       <div class="impact-col">
         <div style="background:var(--ink-3);padding:.65rem 1.25rem;border-bottom:1px solid var(--rule)">
           <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.1em">INPUTS · مدخلات المنظومة</div>
         </div>
-        <div class="impact-item"><div class="ii-tag">PILLAR 01</div><div class="ii-name">القيادة الأصيلة</div><div class="ii-desc">قادة يبنون الثقة بالشفافية والقيم والمصداقية</div></div>
-        <div class="impact-item"><div class="ii-tag">PILLAR 02</div><div class="ii-name">الدعم التنظيمي</div><div class="ii-desc">منظومة دعم تعزز الانتماء والإنتاجية والرضا</div></div>
-        <div class="impact-item"><div class="ii-tag">PILLAR 03</div><div class="ii-name">إدارة القدرات</div><div class="ii-desc">نظام متكامل لرسم مسارات تطوير الكفاءات المؤسسية</div></div>
-        <div class="impact-item"><div class="ii-tag">PILLAR 04-06</div><div class="ii-name">التعلم · المعرفة · الإبداع</div><div class="ii-desc">بيئة تعلم مستمرة ومعرفة مستدامة وإبداع أخضر</div></div>
+        <div class="impact-item"><div class="ii-tag">PILLAR 01</div><div class="ii-name">القيادة الأصيلة · Authentic Leadership</div><div class="ii-desc">Leaders who build trust through transparency, values & credibility<br>قادة يبنون الثقة بالشفافية والقيم والمصداقية</div></div>
+        <div class="impact-item"><div class="ii-tag">PILLAR 02</div><div class="ii-name">الدعم التنظيمي · Org. Support</div><div class="ii-desc">A support system that boosts belonging, productivity & satisfaction<br>منظومة دعم تعزز الانتماء والإنتاجية والرضا</div></div>
+        <div class="impact-item"><div class="ii-tag">PILLAR 03</div><div class="ii-name">إدارة القدرات · Capability Mgmt</div><div class="ii-desc">An integrated system to map enterprise competency pathways<br>نظام متكامل لرسم مسارات تطوير الكفاءات</div></div>
+        <div class="impact-item"><div class="ii-tag">PILLAR 04-06</div><div class="ii-name">التعلم · المعرفة · الإبداع</div><div class="ii-desc">Continuous learning, sustainable knowledge & green creativity<br>تعلم مستمر ومعرفة مستدامة وإبداع أخضر</div></div>
       </div>
 
       <div class="impact-center">
@@ -993,10 +1072,10 @@ body::after{
         <div style="background:var(--ink-3);padding:.65rem 1.25rem;border-bottom:1px solid var(--rule)">
           <div style="font-family:var(--mono);font-size:.62rem;color:var(--muted);letter-spacing:.1em">OUTCOMES · النتائج الاستراتيجية</div>
         </div>
-        <div class="impact-item"><div class="ii-tag">OUTCOME 01</div><div class="ii-name">السلامة والموثوقية</div><div class="ii-desc">صفر حوادث من خلال كفاءات بشرية متميزة ومُدارة</div></div>
-        <div class="impact-item"><div class="ii-tag">OUTCOME 02</div><div class="ii-name">التميز التشغيلي</div><div class="ii-desc">أداء يفوق معايير الصناعة البتروكيماوية العالمية</div></div>
-        <div class="impact-item"><div class="ii-tag">OUTCOME 03</div><div class="ii-name">الاستدامة والمسؤولية</div><div class="ii-desc">مؤسسة تخدم المجتمع والبيئة والأجيال القادمة</div></div>
-        <div class="impact-item"><div class="ii-tag">OUTCOME 04</div><div class="ii-name">قيمة مستدامة للمساهمين</div><div class="ii-desc">عائد استثماري 4.2× على مدى خمس سنوات موثق</div></div>
+        <div class="impact-item"><div class="ii-tag">OUTCOME 01</div><div class="ii-name">السلامة والموثوقية · Safety</div><div class="ii-desc">Zero incidents through well-managed human competencies<br>صفر حوادث من خلال كفاءات بشرية متميزة</div></div>
+        <div class="impact-item"><div class="ii-tag">OUTCOME 02</div><div class="ii-name">التميز التشغيلي · Excellence</div><div class="ii-desc">Performance exceeding global petrochemical benchmarks<br>أداء يفوق معايير الصناعة العالمية</div></div>
+        <div class="impact-item"><div class="ii-tag">OUTCOME 03</div><div class="ii-name">الاستدامة · Sustainability</div><div class="ii-desc">An organization serving society & future generations<br>مؤسسة تخدم المجتمع والأجيال القادمة</div></div>
+        <div class="impact-item"><div class="ii-tag">OUTCOME 04</div><div class="ii-name">قيمة مستدامة · Sustainable Value</div><div class="ii-desc">Documented 4.2× ROI across a five-year horizon<br>عائد استثماري 4.2× موثق على خمس سنوات</div></div>
       </div>
     </div>
   </div>
@@ -1006,40 +1085,70 @@ body::after{
 <section class="sec sec-alt" id="profile">
   <div class="wrap">
     <div class="sec-head r">
-      <h2 class="sec-h2">الملف <span>التنفيذي</span></h2>
-      <div class="sec-tag">Candidate Executive Profile · PhD Business Administration</div>
+      <h2 class="sec-h2">الملف <span>التنفيذي</span><span class="sec-h2-en">Executive Candidate Profile</span></h2>
+      <div class="sec-tag">PhD · Business Administration · دكتوراه في إدارة الأعمال</div>
     </div>
     <div class="profile-layout r">
 
       <div class="p-card">
         <div class="p-card-top">
-          <div class="p-avatar">د</div>
-          <div class="p-name">د. [اسم المرشح]</div>
-          <div class="p-degree">PhD · BUSINESS ADMINISTRATION</div>
+          <div class="p-avatar">ع.م</div>
+          <div class="p-name">د. علي المري</div>
+          <div class="p-degree">PhD CANDIDATE · BUSINESS ADMINISTRATION</div>
         </div>
         <div class="p-stats">
-          <div class="p-stat"><div class="ps-val" style="color:var(--cyan)">PhD</div><div class="ps-lbl">Doctor of Philosophy<br>Business Admin.</div></div>
-          <div class="p-stat"><div class="ps-val" style="color:var(--amber)">8+</div><div class="ps-lbl">سنوات خبرة<br>متخصصة</div></div>
+          <div class="p-stat"><div class="ps-val" style="color:var(--cyan)">22</div><div class="ps-lbl">سنة خبرة عملية<br>Petrochemical Sector</div></div>
+          <div class="p-stat"><div class="ps-val" style="color:var(--amber)">PhD</div><div class="ps-lbl">Business Admin.<br>Researcher</div></div>
           <div class="p-stat"><div class="ps-val" style="color:var(--green)">6</div><div class="ps-lbl">محاور<br>HCTS</div></div>
           <div class="p-stat"><div class="ps-val">5</div><div class="ps-lbl">سنوات<br>خارطة الطريق</div></div>
         </div>
         <div class="p-tags">
+          <span class="p-tag">Authentic Leadership</span>
+          <span class="p-tag">Green Creativity</span>
+          <span class="p-tag">POS</span>
           <span class="p-tag">LMS</span>
           <span class="p-tag">SEeD</span>
           <span class="p-tag">IDP</span>
           <span class="p-tag">JQP</span>
           <span class="p-tag">Kirkpatrick</span>
           <span class="p-tag">TNA</span>
-          <span class="p-tag">Change Mgmt</span>
-          <span class="p-tag">Competency Map</span>
-          <span class="p-tag">OD</span>
           <span class="p-tag">SABIC HR</span>
-          <span class="p-tag">Statistical Analysis</span>
+          <span class="p-tag">SEM / Mediation</span>
           <span class="p-tag">ROI Evaluation</span>
         </div>
       </div>
 
+      <div class="thesis-box">
+        <div class="thesis-label">PhD DISSERTATION · رسالة الدكتوراه</div>
+        <div class="thesis-title-ar">
+          دور الدعم التنظيمي المدرك كوسيط في العلاقة بين القيادة الأصيلة والإبداع الأخضر:
+          دراسة تطبيقية على القطاع الصناعي في المملكة العربية السعودية
+        </div>
+        <div class="thesis-divider"></div>
+        <div class="thesis-title-en">
+          The Role of Perceived Organizational Support as a Mediator in the Relationship between
+          Authentic Leadership and Green Creativity — An Applied Study on the Industrial Sector
+          in the Kingdom of Saudi Arabia
+        </div>
+        <div class="thesis-tags">
+          <span class="t-tag">Authentic Leadership</span>
+          <span class="t-arrow">→</span>
+          <span class="t-tag mediator">Perceived Org. Support</span>
+          <span class="t-arrow">→</span>
+          <span class="t-tag highlight">Green Creativity</span>
+        </div>
+      </div>
+
       <div class="ach-list">
+
+        <div class="ach">
+          <div class="ach-side">🔗</div>
+          <div class="ach-body">
+            <div class="ach-title">منظومة HCTS كتطبيق عملي مباشر لنموذج رسالة الدكتوراه</div>
+            <div class="ach-desc">منظومة Human Capability Transformation System ليست تصميماً عاماً، بل امتداد تطبيقي لنموذج الرسالة: القيادة الأصيلة (Pillar 01) ← الدعم التنظيمي المدرك كمتغير وسيط (Pillar 02) ← الإبداع الأخضر كنتيجة (Pillar 06). هذا يعني أن المرشح لا يقترح إطاراً نظرياً فحسب، بل يملك أداة قياس وتطبيق ميداني مُختبر إحصائياً (SEM/Mediation) على القطاع الصناعي السعودي تحديداً.</div>
+            <div class="ach-chip">Authentic Leadership → POS (Mediator) → Green Creativity · Field-Tested Model</div>
+          </div>
+        </div>
 
         <div class="ach">
           <div class="ach-side">🎓</div>
@@ -1100,7 +1209,61 @@ body::after{
   </div>
 </section>
 
-<!-- ── QUOTE ── -->
+<!-- ── ANALYTICS / CHARTS ── -->
+<section class="sec" id="analytics">
+  <div class="wrap">
+    <div class="sec-head r">
+      <h2 class="sec-h2">التحليلات التفاعلية <span>· Analytics</span><span class="sec-h2-en">Interactive Performance Analytics</span></h2>
+      <div class="sec-tag">Hover & click to explore · مرر واضغط للاستكشاف</div>
+    </div>
+
+    <div class="charts-grid r">
+
+      <!-- Radar: 6 pillars -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div class="chart-title">مؤشرات المحاور الستة<span class="en">Six Pillars Performance Radar</span></div>
+          <div class="chart-tip">HOVER FOR DETAIL</div>
+        </div>
+        <div class="chart-box"><canvas id="radarChart"></canvas></div>
+      </div>
+
+      <!-- Donut: roadmap progress -->
+      <div class="chart-card">
+        <div class="chart-head">
+          <div class="chart-title">تقدم خارطة الطريق<span class="en">Roadmap Milestone Progress</span></div>
+          <div class="chart-tip">CLICK SEGMENTS</div>
+        </div>
+        <div class="chart-box"><canvas id="donutChart"></canvas></div>
+        <div class="legend-row">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>System Launch 100%</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--cyan)"></span>Foundation 75%</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>Integration 30%</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--rule)"></span>Remaining</div>
+        </div>
+      </div>
+
+      <!-- Line: 5-year KPI trajectory with toggles -->
+      <div class="chart-card full">
+        <div class="chart-head">
+          <div class="chart-title">مستهدفات الأداء الرئيسية 2023 – 2030<span class="en">5-Year KPI Targets · Baseline → Target</span></div>
+          <div class="toggle-group" id="kpiToggles">
+            <button class="toggle-btn active" data-idx="0">Trust</button>
+            <button class="toggle-btn active" data-idx="1">Support</button>
+            <button class="toggle-btn active" data-idx="2">Readiness</button>
+            <button class="toggle-btn active" data-idx="3">Knowledge</button>
+            <button class="toggle-btn active" data-idx="4">Green</button>
+            <button class="toggle-btn active" data-idx="5">Pipeline</button>
+          </div>
+        </div>
+        <div class="chart-box tall"><canvas id="lineChart"></canvas></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
 <div class="quote-strip r">
   <span class="qs-mark">"</span>
   <div class="qs-text">الاستثمار في القدرات البشرية اليوم ... هو ضمان الريادة والاستدامة غداً</div>
@@ -1109,13 +1272,124 @@ body::after{
 
 <!-- ── FOOTER ── -->
 <footer class="footer">
-  <div class="footer-brand">PETROKEMYA · WORKFORCE DEVELOPMENT NORTH</div>
+  <div class="footer-brand">PETROKEMYA · WORKFORCE DEVELOPMENT NORTH<br><span style="color:var(--muted);font-size:.6rem">إدارة تطوير القوى العاملة الشمالية</span></div>
   <div class="footer-copy">HCTS · Human Capability Transformation System · 2026 – 2030</div>
   <div class="footer-copy">Manager, Workforce Development North · Executive Portfolio</div>
 </footer>
 
 <script>
-// Progress bar
+// ── CHARTS ──
+const CYAN='#00D4FF', AMBER='#F6C444', GREEN='#34D399', PURPLE='#A78BFA', RULE='#1E2D42', GHOST='#718096', HEAD='#E2E8F0';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.color = GHOST;
+
+// Radar — Six Pillars
+new Chart(document.getElementById('radarChart'), {
+  type:'radar',
+  data:{
+    labels:['Leadership\n87%','Org. Support\n82%','Readiness\n78%','Knowledge\n76%','Innovation\n73%','Pipeline\n74%'],
+    datasets:[{
+      label:'Current · 2024',
+      data:[87,82,78,76,73,74],
+      borderColor:CYAN, backgroundColor:'rgba(0,212,255,0.12)',
+      pointBackgroundColor:CYAN, borderWidth:2, pointRadius:4
+    },{
+      label:'2030 Target',
+      data:[90,88,85,85,80,85],
+      borderColor:AMBER, backgroundColor:'rgba(246,196,68,0.05)',
+      pointBackgroundColor:AMBER, borderWidth:1.5, borderDash:[4,4], pointRadius:3
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    scales:{ r:{
+      min:0,max:100,
+      ticks:{ stepSize:25, color:GHOST, backdropColor:'transparent', font:{size:9} },
+      grid:{ color:RULE }, angleLines:{ color:RULE },
+      pointLabels:{ color:HEAD, font:{size:10} }
+    }},
+    plugins:{ legend:{ position:'bottom', labels:{ boxWidth:10, font:{size:10} } } }
+  }
+});
+
+// Donut — Roadmap progress
+new Chart(document.getElementById('donutChart'), {
+  type:'doughnut',
+  data:{
+    labels:['System Launch','Foundation','Integration','Remaining'],
+    datasets:[{
+      data:[20,15,7,58],
+      backgroundColor:[GREEN, CYAN, AMBER, RULE],
+      borderColor:'#111827', borderWidth:3,
+      hoverOffset:10
+    }]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    cutout:'68%',
+    plugins:{
+      legend:{ display:false },
+      tooltip:{ callbacks:{ label: c => c.label + ': ' + c.raw + '%' } }
+    }
+  },
+  plugins:[{
+    id:'centerText',
+    afterDraw(chart){
+      const {ctx, chartArea:{width,height,left,top}} = chart;
+      ctx.save();
+      ctx.font = '700 28px IBM Plex Mono';
+      ctx.fillStyle = '#F7FAFC';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('42%', left+width/2, top+height/2-8);
+      ctx.font = '400 10px IBM Plex Mono';
+      ctx.fillStyle = GHOST;
+      ctx.fillText('ON TRACK', left+width/2, top+height/2+16);
+      ctx.restore();
+    }
+  }]
+});
+
+// Line — 5-Year KPI Targets
+const kpiData = {
+  labels:['2023','2026','2027','2028','2029','2030'],
+  series:[
+    { label:'Leadership Trust', color:CYAN,   data:[65,72,78,83,87,90] },
+    { label:'Org. Support',     color:AMBER,  data:[60,68,75,80,85,88] },
+    { label:'Workforce Readiness', color:GREEN, data:[55,63,70,77,82,85] },
+    { label:'Knowledge Retention', color:PURPLE, data:[50,58,66,74,80,85] },
+    { label:'Green Creativity', color:'#F87171', data:[45,52,60,68,75,80] },
+    { label:'Leadership Pipeline', color:'#60A5FA', data:[40,50,60,70,80,85] },
+  ]
+};
+const lineChart = new Chart(document.getElementById('lineChart'), {
+  type:'line',
+  data:{
+    labels: kpiData.labels,
+    datasets: kpiData.series.map(s => ({
+      label: s.label, data: s.data,
+      borderColor: s.color, backgroundColor: s.color+'22',
+      borderWidth:2, tension:.35, pointRadius:3, fill:false
+    }))
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    interaction:{ mode:'index', intersect:false },
+    scales:{
+      x:{ grid:{ color:RULE }, ticks:{ font:{size:10} } },
+      y:{ min:30, max:95, grid:{ color:RULE }, ticks:{ font:{size:10}, callback:v=>v+'%' } }
+    },
+    plugins:{ legend:{ display:false } }
+  }
+});
+document.querySelectorAll('#kpiToggles .toggle-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    btn.classList.toggle('active');
+    const idx = +btn.dataset.idx;
+    lineChart.data.datasets[idx].hidden = !btn.classList.contains('active');
+    lineChart.update();
+  });
+});
+
 const prog = document.getElementById('prog');
 window.addEventListener('scroll', () => {
   const h = document.documentElement;
