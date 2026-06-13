@@ -165,19 +165,6 @@ body::after{
   padding:0 2.5rem;
   gap:4rem;
 }
-.hero::after{
-  content:'';
-  position:absolute;
-  top:15%;bottom:15%;
-  left:calc(50% + 60px);
-  width:1px;
-  background:linear-gradient(to bottom,transparent,var(--rule) 30%,var(--rule) 70%,transparent);
-  animation:lineGlow 3s ease-in-out infinite;
-}
-@keyframes lineGlow{
-  0%,100%{opacity:.5}
-  50%{opacity:1;box-shadow:0 0 8px var(--cyan)}
-}
 
 .hero-left{padding:4rem 0}
 
@@ -446,18 +433,6 @@ body::after{
   grid-template-columns:repeat(5,1fr);
   position:relative;
   border:1px solid var(--rule);
-}
-.roadmap::before{
-  content:'';position:absolute;
-  top:72px;left:10%;right:10%;
-  height:1px;
-  background:linear-gradient(90deg,var(--green),var(--cyan),var(--amber));
-  z-index:2;
-  animation:roadmapLineGlow 3s ease-in-out infinite;
-}
-@keyframes roadmapLineGlow{
-  0%,100%{opacity:.7;filter:blur(0)}
-  50%{opacity:1;filter:drop-shadow(0 0 4px rgba(0,212,255,.6))}
 }
 .rm-step{
   padding:2rem 1.5rem;
@@ -926,6 +901,45 @@ body::after{
   .dash-grid{grid-template-columns:1fr}
   .rm-kpis{grid-template-columns:1fr 1fr}
   .footer{flex-direction:column;gap:.75rem;text-align:center}
+}
+
+/* ── VIDEO MODAL ── */
+.video-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.88);
+  align-items:center;justify-content:center;
+  backdrop-filter:blur(10px);
+}
+.video-modal-overlay.open{display:flex}
+.video-modal-inner{
+  position:relative;
+  width:min(92vw,840px);
+  border:1px solid var(--cyan-line);
+  box-shadow:0 0 80px rgba(0,212,255,.25);
+  background:var(--ink);
+}
+.video-modal-inner video{width:100%;display:block;max-height:85vh;object-fit:contain}
+.video-modal-close{
+  position:absolute;top:-42px;left:0;
+  font-family:var(--mono);font-size:.75rem;
+  color:var(--ghost);background:var(--ink-2);border:1px solid var(--rule);
+  cursor:pointer;letter-spacing:.1em;padding:.35rem .9rem;
+  transition:color .15s,border-color .15s;
+}
+.video-modal-close:hover{color:var(--cyan);border-color:var(--cyan)}
+.p-avatar-video{cursor:pointer;position:relative}
+.p-avatar-play{
+  position:absolute;inset:0;
+  display:grid;place-items:center;
+  background:rgba(0,0,0,.25);
+  opacity:0;transition:opacity .2s;
+}
+.p-avatar-video:hover .p-avatar-play{opacity:1}
+.play-btn-circle{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(0,212,255,.85);
+  display:grid;place-items:center;
+  box-shadow:0 0 20px rgba(0,212,255,.5);
 }
 </style>
 </head>
@@ -1464,10 +1478,11 @@ body::after{
 
       <div class="p-card">
         <div class="p-card-top">
-          <div class="p-avatar-video">
+          <div class="p-avatar-video" id="avatarWrap">
             <video autoplay muted loop playsinline>
               <source src="https://res.cloudinary.com/dwtlf9n49/video/upload/q_auto/f_auto/v1781326985/WhatsApp_Video_2026-06-13_at_7.42.28_AM_wcay0n.mp4" type="video/mp4">
             </video>
+            <div class="p-avatar-play"><div class="play-btn-circle"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><polygon points="0,0 14,8 0,16"/></svg></div></div>
           </div>
           <div class="p-name">د. علي المري</div>
           <div class="p-degree">PhD CANDIDATE · BUSINESS ADMINISTRATION</div>
@@ -1820,6 +1835,31 @@ const secIO = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.4 });
 secs.forEach(s => secIO.observe(s));
+
+// ── VIDEO MODAL ──
+document.getElementById('avatarWrap').addEventListener('click',()=>{
+  document.getElementById('videoModal').classList.add('open');
+  document.getElementById('modalVideo').play();
+});
+function closeVideoModal(){
+  document.getElementById('videoModal').classList.remove('open');
+  const v=document.getElementById('modalVideo');
+  v.pause();v.currentTime=0;
+}
+document.getElementById('videoModal').addEventListener('click',function(e){
+  if(e.target===this)closeVideoModal();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideoModal();});
 </script>
+
+<!-- ── VIDEO MODAL ── -->
+<div class="video-modal-overlay" id="videoModal">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" onclick="closeVideoModal()">✕ &nbsp;CLOSE</button>
+    <video id="modalVideo" controls>
+      <source src="https://res.cloudinary.com/dwtlf9n49/video/upload/q_auto/f_auto/v1781326985/WhatsApp_Video_2026-06-13_at_7.42.28_AM_wcay0n.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
 </body>
 </html>
