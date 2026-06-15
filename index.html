@@ -1137,17 +1137,17 @@ const sio=new IntersectionObserver(e=>{
 secs.forEach(s=>sio.observe(s));
 
 // ── PHOTO UPLOAD ──────────────────────────────────────────
-document.getElementById('photoInput').addEventListener('change',e=>{
-  const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    const av=document.getElementById('mainAvatar');
-    av.innerHTML='<img src="'+ev.target.result+'" alt="Ali Al-Marri">';
-  };
-  r.readAsDataURL(f);
-});
-document.getElementById('mainAvatar').addEventListener('click',()=>
-  document.getElementById('photoInput').click());
+(function(){
+  const pi=document.getElementById('photoInput');
+  const av=document.getElementById('mainAvatar');
+  if(pi) pi.addEventListener('change',e=>{
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=ev=>{ if(av) av.innerHTML='<img src="'+ev.target.result+'" alt="Ali Al-Marri">'; };
+    r.readAsDataURL(f);
+  });
+  if(av&&pi) av.addEventListener('click',()=>pi.click());
+})();
 
 // ── COUNTER ANIMATION ─────────────────────────────────────
 function animCounter(el,val,dur=2000){
@@ -1301,41 +1301,41 @@ setInterval(updateJubailClock,1000);
   const vid  = document.getElementById('profileVideo');
   const hint = document.getElementById('videoPlayHint');
   const icon = document.getElementById('videoPlayIcon');
-  if(!wrap||!vid) return;
+  const overlay = document.getElementById('profileVideoModal');
+  const mv = document.getElementById('profileModalVid');
+  const closeBtn = document.getElementById('closeProfileModal');
 
+  if(!wrap || !vid || !overlay || !mv) return;
+
+  // hover hint
   wrap.addEventListener('mouseenter',()=>{
-    hint.style.background='rgba(0,0,0,.25)';
-    icon.style.opacity='1';
+    if(hint){ hint.style.background='rgba(0,0,0,.3)'; }
+    if(icon){ icon.style.opacity='1'; }
   });
   wrap.addEventListener('mouseleave',()=>{
-    hint.style.background='rgba(0,0,0,.0)';
-    icon.style.opacity='0';
+    if(hint){ hint.style.background='rgba(0,0,0,0)'; }
+    if(icon){ icon.style.opacity='0'; }
   });
 
+  // click → open modal with audio
   wrap.addEventListener('click',()=>{
-    // open modal
-    const overlay = document.getElementById('profileVideoModal');
-    const mv = document.getElementById('profileModalVid');
     overlay.style.display='flex';
     mv.muted = false;
     mv.volume = 0.9;
     mv.currentTime = 0;
-    mv.play();
+    mv.play().catch(()=>{ mv.muted=false; mv.play(); });
   });
 
   function closeProfileModal(){
-    const overlay = document.getElementById('profileVideoModal');
-    const mv = document.getElementById('profileModalVid');
     overlay.style.display='none';
     mv.pause();
-    mv.currentTime=0;
-    mv.muted=true;
+    mv.currentTime = 0;
+    mv.muted = true;
   }
-  document.getElementById('profileVideoModal').addEventListener('click',function(e){
-    if(e.target===this) closeProfileModal();
-  });
-  document.getElementById('closeProfileModal').addEventListener('click', closeProfileModal);
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeProfileModal(); });
+
+  overlay.addEventListener('click', function(e){ if(e.target===this) closeProfileModal(); });
+  if(closeBtn) closeBtn.addEventListener('click', closeProfileModal);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeProfileModal(); });
 })();
 
 </script>
