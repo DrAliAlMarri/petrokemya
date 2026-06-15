@@ -988,7 +988,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
             style="width:196px;height:196px;border-radius:50%;object-fit:cover;position:relative;z-index:1;display:block;margin:0 auto;cursor:pointer;border:2px solid var(--cyan);box-shadow:0 0 20px rgba(0,212,255,.3);">
             <source src="https://res.cloudinary.com/dwtlf9n49/video/upload/q_auto/f_auto/v1781326985/WhatsApp_Video_2026-06-13_at_7.42.28_AM_wcay0n.mp4" type="video/mp4">
           </video>
-          <div style="position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.0);transition:background .2s;pointer-events:none;" id="videoPlayHint">
+          <div style="position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,.0);transition:background .2s;cursor:pointer;" id="videoPlayHint">
             <div style="opacity:0;transition:opacity .2s;background:rgba(0,212,255,.85);border-radius:50%;width:44px;height:44px;display:grid;place-items:center;" id="videoPlayIcon">
               <svg width="16" height="18" viewBox="0 0 16 18" fill="white"><polygon points="0,0 16,9 0,18"/></svg>
             </div>
@@ -1318,18 +1318,16 @@ setInterval(updateJubailClock,1000);
   });
 
   // click → open modal with audio
-  wrap.addEventListener('click',()=>{
+  function openVideoModal(){
     overlay.style.display='flex';
     mv.muted = false;
     mv.volume = 1.0;
     mv.currentTime = 0;
-    const playPromise = mv.play();
-    if(playPromise !== undefined){
-      playPromise.catch(()=>{
-        // autoplay blocked — video will play when user interacts with controls
-      });
-    }
-  });
+    mv.play().catch(()=>{});
+  }
+  wrap.addEventListener('click', openVideoModal);
+  if(vid) vid.addEventListener('click', function(e){ e.stopPropagation(); openVideoModal(); });
+  if(hint) hint.addEventListener('click', function(e){ e.stopPropagation(); openVideoModal(); });
 
   function closeProfileModal(){
     overlay.style.display='none';
