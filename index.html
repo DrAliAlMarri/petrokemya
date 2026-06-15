@@ -1041,6 +1041,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   <div class="footer-copy">Manager, Workforce Development North &middot; Ali Al-Marri &middot; PhD Candidate<br>HCTS Framework &middot; 2026&#8211;2030 &middot; All Pillars Active</div>
 </footer>
 
+
+<!-- PROFILE VIDEO MODAL -->
+<div id="profileVideoModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);align-items:center;justify-content:center;backdrop-filter:blur(10px);">
+  <div style="position:relative;width:min(94vw,860px);background:var(--ink2);border:1px solid var(--cyan-line);box-shadow:0 0 80px rgba(0,212,255,.25);">
+    <button id="closeProfileModal" style="position:absolute;top:-42px;left:0;font-family:var(--mono);font-size:.75rem;color:var(--ghost);background:var(--ink2);border:1px solid var(--rule);cursor:pointer;padding:.35rem 1rem;letter-spacing:.1em;transition:color .15s,border-color .15s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--ghost)';this.style.borderColor='var(--rule)'">✕ &nbsp;CLOSE</button>
+    <video id="profileModalVid" controls style="width:100%;display:block;max-height:85vh;object-fit:contain;">
+      <source src="https://res.cloudinary.com/dwtlf9n49/video/upload/q_auto/f_auto/v1781326985/WhatsApp_Video_2026-06-13_at_7.42.28_AM_wcay0n.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
 <script>
 
 // ── LIVE OSCILLATING KPI NUMBERS ──────────────────────────────
@@ -1341,15 +1352,5 @@ setInterval(updateJubailClock,1000);
 })();
 
 </script>
-
-<!-- PROFILE VIDEO MODAL -->
-<div id="profileVideoModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);align-items:center;justify-content:center;backdrop-filter:blur(10px);">
-  <div style="position:relative;width:min(94vw,860px);background:var(--ink2);border:1px solid var(--cyan-line);box-shadow:0 0 80px rgba(0,212,255,.25);">
-    <button id="closeProfileModal" style="position:absolute;top:-42px;left:0;font-family:var(--mono);font-size:.75rem;color:var(--ghost);background:var(--ink2);border:1px solid var(--rule);cursor:pointer;padding:.35rem 1rem;letter-spacing:.1em;transition:color .15s,border-color .15s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='var(--ghost)';this.style.borderColor='var(--rule)'">✕ &nbsp;CLOSE</button>
-    <video id="profileModalVid" controls style="width:100%;display:block;max-height:85vh;object-fit:contain;">
-      <source src="https://res.cloudinary.com/dwtlf9n49/video/upload/q_auto/f_auto/v1781326985/WhatsApp_Video_2026-06-13_at_7.42.28_AM_wcay0n.mp4" type="video/mp4">
-    </video>
-  </div>
-</div>
 </body>
 </html>
