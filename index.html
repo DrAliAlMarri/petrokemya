@@ -131,10 +131,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .tb-time{font-family:var(--mono);font-size:.62rem;color:var(--muted)}
 
 /* ── TICKER ─────────────────────────────────────── */
-.ticker-wrap{position:relative;z-index:10;overflow:hidden;height:34px;
-  background:rgba(3,8,16,.95);border-bottom:1px solid var(--rule2);
+.ticker-wrap{position:sticky;top:56px;z-index:200;overflow:hidden;height:34px;
+  background:rgba(3,8,16,.98);border-bottom:1px solid var(--rule2);
   backdrop-filter:blur(16px);
-  box-shadow:0 2px 20px rgba(0,212,255,.08);}
+  box-shadow:0 4px 24px rgba(0,212,255,.12);}
 .ticker-inner{display:flex;animation:tickerScroll 55s linear infinite;height:100%;align-items:center}
 .ticker-inner:hover{animation-play-state:paused}
 .ti{white-space:nowrap;padding:0 2.5rem;font-family:var(--mono);
@@ -938,6 +938,20 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   .cmd-kpis{grid-template-columns:repeat(2,1fr)}
 }
 
+
+/* ── CONTINUOUS KPI BAR ANIMATION ── */
+@keyframes kpiBarPulse {
+  0%   { opacity:1; filter:brightness(1); }
+  50%  { opacity:.82; filter:brightness(1.3); }
+  100% { opacity:1; filter:brightness(1); }
+}
+@keyframes kpiNumFloat {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-3px); }
+}
+.imp-fill { animation: barGrow 2s ease-out forwards, barPulse 2.5s ease-in-out infinite 2s, kpiBarPulse 3s ease-in-out infinite !important; }
+.sm-bar-fill { animation: barPulse 2.5s ease-in-out infinite, kpiBarPulse 3.5s ease-in-out infinite !important; }
+.cmd-kpi-val, .rm-kpi-val, .ps-val, .dc-big { animation: kpiNumFloat 3s ease-in-out infinite; }
 </style>
 </head>
 <body>
@@ -954,11 +968,212 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
     <a href="#s07">Impact</a><a href="#s08">Profile</a>
   </nav>
   <div class="tb-right">
-    <div class="live-pill"><span class="live-dot"></span>LIVE &middot; 2024</div>
+    <div class="live-pill"><span class="live-dot"></span>LIVE &middot; <span id="liveYear"></span></div>
     <div class="tb-time" id="jubailClock">JUBAIL &middot; --:--</div>
   </div>
 </header>
-<div class="ticker-wrap"><div class="ticker-inner"><div class="ti">LEADERSHIP TRUST INDEX <span class="hi">87%</span> <span class="up">&#9650;12% YoY</span></div><div class="ti">WORKFORCE READINESS <span class="hi">78%</span> <span class="up">&#9650;10%</span></div><div class="ti">ORG. SUPPORT INDEX <span class="hi">82%</span> <span class="up">&#9650;9%</span></div><div class="ti">KNOWLEDGE SUSTAINABILITY <span class="hi">76%</span> <span class="up">&#9650;11%</span></div><div class="ti">INNOVATION &amp; GREEN <span class="hi">73%</span> <span class="up">&#9650;13%</span></div><div class="ti">LEADERSHIP PIPELINE <span class="hi">74%</span> <span class="up">&#9650;10%</span></div><div class="ti">OVERALL HCTS INDEX <span class="hi">78%</span> <span class="up">&#9650;11%</span></div><div class="ti">ROADMAP PROGRESS <span class="amb">42%</span> ON TRACK</div><div class="ti">PhD RESEARCH <span class="hi">AUTHENTIC LEADERSHIP &#8594; POS &#8594; GREEN CREATIVITY</span></div><div class="ti">LEADERSHIP TRUST INDEX <span class="hi">87%</span> <span class="up">&#9650;12% YoY</span></div><div class="ti">WORKFORCE READINESS <span class="hi">78%</span> <span class="up">&#9650;10%</span></div><div class="ti">ORG. SUPPORT INDEX <span class="hi">82%</span> <span class="up">&#9650;9%</span></div><div class="ti">KNOWLEDGE SUSTAINABILITY <span class="hi">76%</span> <span class="up">&#9650;11%</span></div><div class="ti">INNOVATION &amp; GREEN <span class="hi">73%</span> <span class="up">&#9650;13%</span></div><div class="ti">LEADERSHIP PIPELINE <span class="hi">74%</span> <span class="up">&#9650;10%</span></div><div class="ti">OVERALL HCTS INDEX <span class="hi">78%</span> <span class="up">&#9650;11%</span></div><div class="ti">ROADMAP PROGRESS <span class="amb">42%</span> ON TRACK</div><div class="ti">PhD RESEARCH <span class="hi">AUTHENTIC LEADERSHIP &#8594; POS &#8594; GREEN CREATIVITY</span></div></div></div>
+<div class="ticker-wrap"><div class="ticker-inner"><div class="ti">LEADERSHIP TRUST INDEX <span class="hi">87%</span> <span class="up">&#9650;12%</span></div><div class="ti">WORKFORCE READINESS <span class="hi">78%</span> <span class="up">&#9650;10%</span></div><div class="ti">ORG. SUPPORT INDEX <span class="hi">82%</span> <span class="up">&#9650;9%</span></div><div class="ti">KNOWLEDGE SUSTAINABILITY <span class="hi">76%</span> <span class="up">&#9650;11%</span></div><div class="ti">INNOVATION &amp; GREEN <span class="hi">73%</span> <span class="up">&#9650;13%</span></div><div class="ti">LEADERSHIP PIPELINE <span class="hi">74%</span> <span class="up">&#9650;10%</span></div><div class="ti">OVERALL HCTS INDEX <span class="hi">78%</span> <span class="up">&#9650;11%</span></div><div class="ti">ROADMAP PROGRESS <span class="amb">42%</span> ON TRACK</div><div class="ti">PhD RESEARCH <span class="hi">AUTHENTIC LEADERSHIP &#8594; POS &#8594; GREEN CREATIVITY</span></div><div class="ti">LEADERSHIP TRUST INDEX <span class="hi">87%</span> <span class="up">&#9650;12%</span></div><div class="ti">WORKFORCE READINESS <span class="hi">78%</span> <span class="up">&#9650;10%</span></div><div class="ti">ORG. SUPPORT INDEX <span class="hi">82%</span> <span class="up">&#9650;9%</span></div><div class="ti">KNOWLEDGE SUSTAINABILITY <span class="hi">76%</span> <span class="up">&#9650;11%</span></div><div class="ti">INNOVATION &amp; GREEN <span class="hi">73%</span> <span class="up">&#9650;13%</span></div><div class="ti">LEADERSHIP PIPELINE <span class="hi">74%</span> <span class="up">&#9650;10%</span></div><div class="ti">OVERALL HCTS INDEX <span class="hi">78%</span> <span class="up">&#9650;11%</span></div><div class="ti">ROADMAP PROGRESS <span class="amb">42%</span> ON TRACK</div><div class="ti">PhD RESEARCH <span class="hi">AUTHENTIC LEADERSHIP &#8594; POS &#8594; GREEN CREATIVITY</span></div></div></div>
+<section class="sec sec-alt" id="s05">
+<div class="wrap">
+  <div class="sec-head r">
+      <div class="sec-eyebrow">Section 05</div>
+      <h2 class="sec-h2">Human Capability <span class="cx">Command Center</span><span class="sec-h2-ar">مركز قيادة القدرات البشرية الموحد</span></h2>
+      <div class="sec-tag">Unified Executive Intelligence · الذكاء التنفيذي الموحد — Leadership · Risk · Readiness · Innovation</div>
+    </div>
+  <div class="sec-quote r"><div class="sq-en">A leader who cannot see the data cannot lead the future.</div><div class="sq-ar">قائدٌ لا يرى البيانات — لا يستطيع قيادة المستقبل.</div></div>
+  <!-- HCHI Flagship -->
+  <div class="cmd-hero r">
+    <div>
+      <div style="font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">
+        HUMAN CAPABILITY HEALTH INDEX (HCHI) · مؤشر صحة القدرة البشرية
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-bottom:1rem">
+        <div>
+          <div style="font-family:var(--mono);font-size:5.5rem;font-weight:700;color:transparent;background:linear-gradient(135deg,var(--cyan),var(--purple),var(--green));-webkit-background-clip:text;background-clip:text;line-height:1;animation:kpiPulse 3s ease-in-out infinite">78<span style="font-size:2rem">%</span></div>
+          <div style="font-family:var(--mono);font-size:.7rem;color:var(--muted)">Overall HCHI Score · Q2 2024</div>
+          <div style="font-family:var(--mono);font-size:.75rem;color:var(--green);margin-top:.3rem;animation:arrowUp 2s ease-in-out infinite">&#9650; 11% YoY · On Track to 85% by 2030</div>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <div style="margin-bottom:.5rem">
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.25rem"><span>Current 2024</span><span style="color:var(--cyan)">78%</span></div>
+            <div style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:78%;height:100%;background:linear-gradient(90deg,var(--cyan2),var(--cyan));border-radius:3px;animation:barPulse 3s ease-in-out infinite"></div></div>
+          </div>
+          <div style="margin-bottom:.5rem">
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.25rem"><span>Target 2027</span><span style="color:var(--purple)">82%</span></div>
+            <div style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:82%;height:100%;background:linear-gradient(90deg,var(--purple2),var(--purple));border-radius:3px;opacity:.5"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.25rem"><span>Target 2030</span><span style="color:var(--green)">85%</span></div>
+            <div style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:85%;height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:3px;opacity:.35"></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);padding:.6rem 1rem;font-family:var(--mono);font-size:.65rem;color:var(--cyan)">7 PILLARS ACTIVE</div>
+        <div style="background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);padding:.6rem 1rem;font-family:var(--mono);font-size:.65rem;color:var(--green)">TREND: &#9650; IMPROVING</div>
+        <div style="background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);padding:.6rem 1rem;font-family:var(--mono);font-size:.65rem;color:var(--purple)">28 SUB-INDICATORS</div>
+      </div>
+    </div>
+    <div style="text-align:center">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="hchiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00D4FF"/>
+            <stop offset="40%" stop-color="#A855F7"/>
+            <stop offset="100%" stop-color="#00FF88"/>
+          </linearGradient>
+        </defs>
+        <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="12"/>
+        <circle cx="100" cy="100" r="85" fill="none" stroke="url(#hchiGrad)" stroke-width="12"
+          stroke-dasharray="534" stroke-dashoffset="117"
+          stroke-linecap="round" transform="rotate(-90 100 100)"/>
+        <text x="100" y="90" text-anchor="middle" font-family="IBM Plex Mono" font-size="36" font-weight="700" fill="white">78%</text>
+        <text x="100" y="112" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#94A3B8">HCHI SCORE</text>
+        <text x="100" y="130" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#00FF88">&#9650; 11% YoY</text>
+      </svg>
+    </div>
+  </div>
+  <!-- 7 KPI GAUGES -->
+  <div class="cmd-kpis r"><div class="ck-card" style="animation-delay:0s">
+  <div class="ck-lbl">INDEX 01</div>
+  <div class="ck-en">Leadership Trust</div><div class="ck-ar">الثقة القيادية</div>
+  <div class="ck-gauge">
+    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00AACC"/><stop offset="100%" stop-color="#00D4FF"/></linearGradient></defs>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg1)" stroke-width="6"
+        stroke-dasharray="201.1" stroke-dashoffset="29.4" stroke-linecap="round"/>
+    </svg>
+    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--cyan)">87%</div>
+    <div class="ck-delta">&#9650;12%</div></div>
+  </div>
+  <div class="ck-target">2030 Target: 90%</div>
+</div><div class="ck-card" style="animation-delay:0.2s">
+  <div class="ck-lbl">INDEX 02</div>
+  <div class="ck-en">Org. Support</div><div class="ck-ar">الدعم التنظيمي</div>
+  <div class="ck-gauge">
+    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient></defs>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg2)" stroke-width="6"
+        stroke-dasharray="201.1" stroke-dashoffset="40.7" stroke-linecap="round"/>
+    </svg>
+    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--amber)">82%</div>
+    <div class="ck-delta">&#9650;9%</div></div>
+  </div>
+  <div class="ck-target">2030 Target: 88%</div>
+</div><div class="ck-card" style="animation-delay:0.4s">
+  <div class="ck-lbl">INDEX 03</div>
+  <div class="ck-en">Learning Velocity</div><div class="ck-ar">سرعة التعلم</div>
+  <div class="ck-gauge">
+    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg3)" stroke-width="6"
+        stroke-dasharray="201.1" stroke-dashoffset="52.0" stroke-linecap="round"/>
+    </svg>
+    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--purple)">77%</div>
+    <div class="ck-delta">&#9650;8%</div></div>
+  </div>
+  <div class="ck-target">2030 Target: 85%</div>
+</div><div class="ck-card" style="animation-delay:0.6s">
+  <div class="ck-lbl">INDEX 04</div>
+  <div class="ck-en">Capability Readiness</div><div class="ck-ar">جاهزية القدرات</div>
+  <div class="ck-gauge">
+    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00AACC"/><stop offset="100%" stop-color="#00D4FF"/></linearGradient></defs>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg4)" stroke-width="6"
+        stroke-dasharray="201.1" stroke-dashoffset="49.8" stroke-linecap="round"/>
+    </svg>
+    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--cyan)">78%</div>
+    <div class="ck-delta">&#9650;10%</div></div>
+  </div>
+  <div class="ck-target">2030 Target: 85%</div>
+</div><div class="ck-card" style="animation-delay:0.8s">
+  <div class="ck-lbl">INDEX 05</div>
+  <div class="ck-en">Knowledge Sustainability</div><div class="ck-ar">استدامة المعرفة</div>
+  <div class="ck-gauge">
+    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg5)" stroke-width="6"
+        stroke-dasharray="201.1" stroke-dashoffset="54.3" stroke-linecap="round"/>
+    </svg>
+    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--purple)">76%</div>
+    <div class="ck-delta">&#9650;11%</div></div>
+  </div>
+  <div class="ck-target">2030 Target: 85%</div>
+</div><div class="ck-card" style="animation-delay:1.0s">
+  <div class="ck-lbl">INDEX 06</div>
+  <div class="ck-en">Green Creativity</div><div class="ck-ar">الإبداع الأخضر</div>
+  <div class="ck-gauge">
+    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg6" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#00FF88"/></linearGradient></defs>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg6)" stroke-width="6"
+        stroke-dasharray="201.1" stroke-dashoffset="61.1" stroke-linecap="round"/>
+    </svg>
+    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--green)">73%</div>
+    <div class="ck-delta">&#9650;13%</div></div>
+  </div>
+  <div class="ck-target">2030 Target: 80%</div>
+</div><div class="ck-card" style="animation-delay:1.2s">
+  <div class="ck-lbl">INDEX 07</div>
+  <div class="ck-en">Leadership Pipeline</div><div class="ck-ar">قيادات المستقبل</div>
+  <div class="ck-gauge">
+    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg7" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#CC0033"/><stop offset="100%" stop-color="#FF4466"/></linearGradient></defs>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg7)" stroke-width="6"
+        stroke-dasharray="201.1" stroke-dashoffset="58.8" stroke-linecap="round"/>
+    </svg>
+    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--red)">74%</div>
+    <div class="ck-delta">&#9650;10%</div></div>
+  </div>
+  <div class="ck-target">2030 Target: 85%</div>
+</div>
+    <div class="ck-card" style="background:rgba(0,212,255,.07);border-color:rgba(0,212,255,.3);animation:totalPulse 4s ease-in-out infinite">
+      <div class="ck-lbl">OVERALL</div>
+      <div class="ck-en">HCHI Score</div>
+      <div class="ck-ar">مؤشر صحة القدرة</div>
+      <div class="ck-gauge">
+        <svg width="76" height="76" viewBox="0 0 76 76">
+          <defs><linearGradient id="ckgh" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="50%" stop-color="#A855F7"/><stop offset="100%" stop-color="#00FF88"/></linearGradient></defs>
+          <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
+          <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckgh)" stroke-width="6"
+            stroke-dasharray="201.1" stroke-dashoffset="49.8" stroke-linecap="round"/>
+        </svg>
+        <div class="ck-gauge-text"><div class="ck-pct" style="font-size:1.6rem">78%</div><div class="ck-delta">&#9650;11%</div></div>
+      </div>
+      <div class="ck-target">2030 Target: 85%</div>
+    </div>
+  </div>
+  <!-- SUCCESS METRICS for Command Center -->
+  <div class="success-grid r">
+    <div class="sm-card borderGlowCyan">
+      <div class="sm-head">LEADERSHIP SUCCESS METRICS · مقاييس نجاح القيادة</div>
+      <div class="sm-en">Leadership Trust &amp; Pipeline</div>
+      <div class="sm-ar">الثقة القيادية وخط الإمداد</div>
+      <div class="sm-kpi-row"><span class="sm-kpi-lbl">Trust Index Now</span><div><span class="sm-kpi-val">87%</span> <span class="sm-kpi-tgt">→ 90%</span></div></div>
+      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:87%;background:linear-gradient(90deg,var(--cyan2),var(--cyan))"></div></div>
+      <div class="sm-kpi-row" style="margin-top:.5rem"><span class="sm-kpi-lbl">Successor Readiness</span><div><span class="sm-kpi-val">38%</span> <span class="sm-kpi-tgt">→ 85%</span></div></div>
+      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:38%;background:linear-gradient(90deg,var(--red),var(--amber))"></div></div>
+    </div>
+    <div class="sm-card borderGlowGreen">
+      <div class="sm-head">KNOWLEDGE SUCCESS METRICS · مقاييس نجاح المعرفة</div>
+      <div class="sm-en">Knowledge Sustainability &amp; Transfer</div>
+      <div class="sm-ar">استدامة المعرفة ونقلها</div>
+      <div class="sm-kpi-row"><span class="sm-kpi-lbl">Knowledge Index Now</span><div><span class="sm-kpi-val">76%</span> <span class="sm-kpi-tgt">→ 85%</span></div></div>
+      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:76%;background:linear-gradient(90deg,var(--green2),var(--green))"></div></div>
+      <div class="sm-kpi-row" style="margin-top:.5rem"><span class="sm-kpi-lbl">Critical Knowledge Captured</span><div><span class="sm-kpi-val">61%</span> <span class="sm-kpi-tgt">→ 95%</span></div></div>
+      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:61%;background:linear-gradient(90deg,var(--amber2),var(--green))"></div></div>
+    </div>
+    <div class="sm-card borderGlowPurple">
+      <div class="sm-head">INNOVATION SUCCESS METRICS · مقاييس نجاح الابتكار</div>
+      <div class="sm-en">Green Creativity &amp; Innovation</div>
+      <div class="sm-ar">الإبداع الأخضر والابتكار</div>
+      <div class="sm-kpi-row"><span class="sm-kpi-lbl">Innovation Index Now</span><div><span class="sm-kpi-val">73%</span> <span class="sm-kpi-tgt">→ 80%</span></div></div>
+      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:73%;background:linear-gradient(90deg,var(--purple2),var(--purple))"></div></div>
+      <div class="sm-kpi-row" style="margin-top:.5rem"><span class="sm-kpi-lbl">ESG Alignment Score</span><div><span class="sm-kpi-val">68%</span> <span class="sm-kpi-tgt">→ 90%</span></div></div>
+      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:68%;background:linear-gradient(90deg,var(--purple2),var(--green))"></div></div>
+    </div>
+  </div>
+</div>
+</section>
 <section class="sec sec-alt" id="s01">
 <div class="wrap">
   <div class="sec-head r">
@@ -1303,207 +1518,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 </div></div>
 </div>
 </section>
-<section class="sec sec-alt" id="s05">
-<div class="wrap">
-  <div class="sec-head r">
-      <div class="sec-eyebrow">Section 05</div>
-      <h2 class="sec-h2">Human Capability <span class="cx">Command Center</span><span class="sec-h2-ar">مركز قيادة القدرات البشرية الموحد</span></h2>
-      <div class="sec-tag">Unified Executive Intelligence · الذكاء التنفيذي الموحد — Leadership · Risk · Readiness · Innovation</div>
-    </div>
-  <div class="sec-quote r"><div class="sq-en">A leader who cannot see the data cannot lead the future.</div><div class="sq-ar">قائدٌ لا يرى البيانات — لا يستطيع قيادة المستقبل.</div></div>
-  <!-- HCHI Flagship -->
-  <div class="cmd-hero r">
-    <div>
-      <div style="font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem">
-        HUMAN CAPABILITY HEALTH INDEX (HCHI) · مؤشر صحة القدرة البشرية
-      </div>
-      <div style="display:flex;align-items:flex-end;gap:2rem;flex-wrap:wrap;margin-bottom:1rem">
-        <div>
-          <div style="font-family:var(--mono);font-size:5.5rem;font-weight:700;color:transparent;background:linear-gradient(135deg,var(--cyan),var(--purple),var(--green));-webkit-background-clip:text;background-clip:text;line-height:1;animation:kpiPulse 3s ease-in-out infinite">78<span style="font-size:2rem">%</span></div>
-          <div style="font-family:var(--mono);font-size:.7rem;color:var(--muted)">Overall HCHI Score · Q2 2024</div>
-          <div style="font-family:var(--mono);font-size:.75rem;color:var(--green);margin-top:.3rem;animation:arrowUp 2s ease-in-out infinite">&#9650; 11% YoY · On Track to 85% by 2030</div>
-        </div>
-        <div style="flex:1;min-width:200px">
-          <div style="margin-bottom:.5rem">
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.25rem"><span>Current 2024</span><span style="color:var(--cyan)">78%</span></div>
-            <div style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:78%;height:100%;background:linear-gradient(90deg,var(--cyan2),var(--cyan));border-radius:3px;animation:barPulse 3s ease-in-out infinite"></div></div>
-          </div>
-          <div style="margin-bottom:.5rem">
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.25rem"><span>Target 2027</span><span style="color:var(--purple)">82%</span></div>
-            <div style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:82%;height:100%;background:linear-gradient(90deg,var(--purple2),var(--purple));border-radius:3px;opacity:.5"></div></div>
-          </div>
-          <div>
-            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:.25rem"><span>Target 2030</span><span style="color:var(--green)">85%</span></div>
-            <div style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden"><div style="width:85%;height:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:3px;opacity:.35"></div></div>
-          </div>
-        </div>
-      </div>
-      <div style="display:flex;gap:1rem;flex-wrap:wrap">
-        <div style="background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);padding:.6rem 1rem;font-family:var(--mono);font-size:.65rem;color:var(--cyan)">7 PILLARS ACTIVE</div>
-        <div style="background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);padding:.6rem 1rem;font-family:var(--mono);font-size:.65rem;color:var(--green)">TREND: &#9650; IMPROVING</div>
-        <div style="background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);padding:.6rem 1rem;font-family:var(--mono);font-size:.65rem;color:var(--purple)">28 SUB-INDICATORS</div>
-      </div>
-    </div>
-    <div style="text-align:center">
-      <svg width="200" height="200" viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="hchiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#00D4FF"/>
-            <stop offset="40%" stop-color="#A855F7"/>
-            <stop offset="100%" stop-color="#00FF88"/>
-          </linearGradient>
-        </defs>
-        <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="12"/>
-        <circle cx="100" cy="100" r="85" fill="none" stroke="url(#hchiGrad)" stroke-width="12"
-          stroke-dasharray="534" stroke-dashoffset="117"
-          stroke-linecap="round" transform="rotate(-90 100 100)"/>
-        <text x="100" y="90" text-anchor="middle" font-family="IBM Plex Mono" font-size="36" font-weight="700" fill="white">78%</text>
-        <text x="100" y="112" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#94A3B8">HCHI SCORE</text>
-        <text x="100" y="130" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#00FF88">&#9650; 11% YoY</text>
-      </svg>
-    </div>
-  </div>
-  <!-- 7 KPI GAUGES -->
-  <div class="cmd-kpis r"><div class="ck-card" style="animation-delay:0s">
-  <div class="ck-lbl">INDEX 01</div>
-  <div class="ck-en">Leadership Trust</div><div class="ck-ar">الثقة القيادية</div>
-  <div class="ck-gauge">
-    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00AACC"/><stop offset="100%" stop-color="#00D4FF"/></linearGradient></defs>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg1)" stroke-width="6"
-        stroke-dasharray="201.1" stroke-dashoffset="29.4" stroke-linecap="round"/>
-    </svg>
-    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--cyan)">87%</div>
-    <div class="ck-delta">&#9650;12%</div></div>
-  </div>
-  <div class="ck-target">2030 Target: 90%</div>
-</div><div class="ck-card" style="animation-delay:0.2s">
-  <div class="ck-lbl">INDEX 02</div>
-  <div class="ck-en">Org. Support</div><div class="ck-ar">الدعم التنظيمي</div>
-  <div class="ck-gauge">
-    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#F59E0B"/></linearGradient></defs>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg2)" stroke-width="6"
-        stroke-dasharray="201.1" stroke-dashoffset="40.7" stroke-linecap="round"/>
-    </svg>
-    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--amber)">82%</div>
-    <div class="ck-delta">&#9650;9%</div></div>
-  </div>
-  <div class="ck-target">2030 Target: 88%</div>
-</div><div class="ck-card" style="animation-delay:0.4s">
-  <div class="ck-lbl">INDEX 03</div>
-  <div class="ck-en">Learning Velocity</div><div class="ck-ar">سرعة التعلم</div>
-  <div class="ck-gauge">
-    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg3)" stroke-width="6"
-        stroke-dasharray="201.1" stroke-dashoffset="52.0" stroke-linecap="round"/>
-    </svg>
-    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--purple)">77%</div>
-    <div class="ck-delta">&#9650;8%</div></div>
-  </div>
-  <div class="ck-target">2030 Target: 85%</div>
-</div><div class="ck-card" style="animation-delay:0.6s">
-  <div class="ck-lbl">INDEX 04</div>
-  <div class="ck-en">Capability Readiness</div><div class="ck-ar">جاهزية القدرات</div>
-  <div class="ck-gauge">
-    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00AACC"/><stop offset="100%" stop-color="#00D4FF"/></linearGradient></defs>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg4)" stroke-width="6"
-        stroke-dasharray="201.1" stroke-dashoffset="49.8" stroke-linecap="round"/>
-    </svg>
-    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--cyan)">78%</div>
-    <div class="ck-delta">&#9650;10%</div></div>
-  </div>
-  <div class="ck-target">2030 Target: 85%</div>
-</div><div class="ck-card" style="animation-delay:0.8s">
-  <div class="ck-lbl">INDEX 05</div>
-  <div class="ck-en">Knowledge Sustainability</div><div class="ck-ar">استدامة المعرفة</div>
-  <div class="ck-gauge">
-    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#A855F7"/></linearGradient></defs>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg5)" stroke-width="6"
-        stroke-dasharray="201.1" stroke-dashoffset="54.3" stroke-linecap="round"/>
-    </svg>
-    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--purple)">76%</div>
-    <div class="ck-delta">&#9650;11%</div></div>
-  </div>
-  <div class="ck-target">2030 Target: 85%</div>
-</div><div class="ck-card" style="animation-delay:1.0s">
-  <div class="ck-lbl">INDEX 06</div>
-  <div class="ck-en">Green Creativity</div><div class="ck-ar">الإبداع الأخضر</div>
-  <div class="ck-gauge">
-    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg6" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#00FF88"/></linearGradient></defs>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg6)" stroke-width="6"
-        stroke-dasharray="201.1" stroke-dashoffset="61.1" stroke-linecap="round"/>
-    </svg>
-    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--green)">73%</div>
-    <div class="ck-delta">&#9650;13%</div></div>
-  </div>
-  <div class="ck-target">2030 Target: 80%</div>
-</div><div class="ck-card" style="animation-delay:1.2s">
-  <div class="ck-lbl">INDEX 07</div>
-  <div class="ck-en">Leadership Pipeline</div><div class="ck-ar">قيادات المستقبل</div>
-  <div class="ck-gauge">
-    <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="ckg7" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#CC0033"/><stop offset="100%" stop-color="#FF4466"/></linearGradient></defs>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-      <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckg7)" stroke-width="6"
-        stroke-dasharray="201.1" stroke-dashoffset="58.8" stroke-linecap="round"/>
-    </svg>
-    <div class="ck-gauge-text"><div class="ck-pct" style="color:var(--red)">74%</div>
-    <div class="ck-delta">&#9650;10%</div></div>
-  </div>
-  <div class="ck-target">2030 Target: 85%</div>
-</div>
-    <div class="ck-card" style="background:rgba(0,212,255,.07);border-color:rgba(0,212,255,.3);animation:totalPulse 4s ease-in-out infinite">
-      <div class="ck-lbl">OVERALL</div>
-      <div class="ck-en">HCHI Score</div>
-      <div class="ck-ar">مؤشر صحة القدرة</div>
-      <div class="ck-gauge">
-        <svg width="76" height="76" viewBox="0 0 76 76">
-          <defs><linearGradient id="ckgh" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00D4FF"/><stop offset="50%" stop-color="#A855F7"/><stop offset="100%" stop-color="#00FF88"/></linearGradient></defs>
-          <circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="6"/>
-          <circle cx="38" cy="38" r="32" fill="none" stroke="url(#ckgh)" stroke-width="6"
-            stroke-dasharray="201.1" stroke-dashoffset="49.8" stroke-linecap="round"/>
-        </svg>
-        <div class="ck-gauge-text"><div class="ck-pct" style="font-size:1.6rem">78%</div><div class="ck-delta">&#9650;11%</div></div>
-      </div>
-      <div class="ck-target">2030 Target: 85%</div>
-    </div>
-  </div>
-  <!-- SUCCESS METRICS for Command Center -->
-  <div class="success-grid r">
-    <div class="sm-card borderGlowCyan">
-      <div class="sm-head">LEADERSHIP SUCCESS METRICS · مقاييس نجاح القيادة</div>
-      <div class="sm-en">Leadership Trust &amp; Pipeline</div>
-      <div class="sm-ar">الثقة القيادية وخط الإمداد</div>
-      <div class="sm-kpi-row"><span class="sm-kpi-lbl">Trust Index Now</span><div><span class="sm-kpi-val">87%</span> <span class="sm-kpi-tgt">→ 90%</span></div></div>
-      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:87%;background:linear-gradient(90deg,var(--cyan2),var(--cyan))"></div></div>
-      <div class="sm-kpi-row" style="margin-top:.5rem"><span class="sm-kpi-lbl">Successor Readiness</span><div><span class="sm-kpi-val">38%</span> <span class="sm-kpi-tgt">→ 85%</span></div></div>
-      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:38%;background:linear-gradient(90deg,var(--red),var(--amber))"></div></div>
-    </div>
-    <div class="sm-card borderGlowGreen">
-      <div class="sm-head">KNOWLEDGE SUCCESS METRICS · مقاييس نجاح المعرفة</div>
-      <div class="sm-en">Knowledge Sustainability &amp; Transfer</div>
-      <div class="sm-ar">استدامة المعرفة ونقلها</div>
-      <div class="sm-kpi-row"><span class="sm-kpi-lbl">Knowledge Index Now</span><div><span class="sm-kpi-val">76%</span> <span class="sm-kpi-tgt">→ 85%</span></div></div>
-      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:76%;background:linear-gradient(90deg,var(--green2),var(--green))"></div></div>
-      <div class="sm-kpi-row" style="margin-top:.5rem"><span class="sm-kpi-lbl">Critical Knowledge Captured</span><div><span class="sm-kpi-val">61%</span> <span class="sm-kpi-tgt">→ 95%</span></div></div>
-      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:61%;background:linear-gradient(90deg,var(--amber2),var(--green))"></div></div>
-    </div>
-    <div class="sm-card borderGlowPurple">
-      <div class="sm-head">INNOVATION SUCCESS METRICS · مقاييس نجاح الابتكار</div>
-      <div class="sm-en">Green Creativity &amp; Innovation</div>
-      <div class="sm-ar">الإبداع الأخضر والابتكار</div>
-      <div class="sm-kpi-row"><span class="sm-kpi-lbl">Innovation Index Now</span><div><span class="sm-kpi-val">73%</span> <span class="sm-kpi-tgt">→ 80%</span></div></div>
-      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:73%;background:linear-gradient(90deg,var(--purple2),var(--purple))"></div></div>
-      <div class="sm-kpi-row" style="margin-top:.5rem"><span class="sm-kpi-lbl">ESG Alignment Score</span><div><span class="sm-kpi-val">68%</span> <span class="sm-kpi-tgt">→ 90%</span></div></div>
-      <div class="sm-bar-track"><div class="sm-bar-fill" style="width:68%;background:linear-gradient(90deg,var(--purple2),var(--green))"></div></div>
-    </div>
-  </div>
-</div>
-</section>
 <section class="sec sec-alt" id="s06">
 <div class="wrap">
   <div class="sec-head r">
@@ -1722,7 +1736,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 <div class="wrap">
   <div class="sec-head r">
       <div class="sec-eyebrow">Section 08</div>
-      <h2 class="sec-h2">Personal <span class="cx">Leadership Narrative</span><span class="sec-h2-ar">لماذا هذا يهمني — الرواية القيادية الشخصية</span></h2>
+      <h2 class="sec-h2"><span class="cx">Leadership Narrative</span><span class="sec-h2-ar">لماذا هذا يهمني — الرواية القيادية</span></h2>
       <div class="sec-tag">Why This Matters · Dr. Ali Al-Marri</div>
     </div>
   <div class="sec-quote r"><div class="sq-en">Sustainable organizational performance begins with sustainable human capability.</div><div class="sq-ar">الأداء المؤسسي المستدام يبدأ بالقدرة البشرية المستدامة.</div></div>
@@ -1781,7 +1795,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
         </div>
       </div>
       <div class="conviction-box">
-        <div class="conviction-lbl">PERSONAL CONVICTION · القناعة الشخصية</div>
+        <div class="conviction-lbl">CONVICTION · القناعة</div>
         <div class="conviction-en">"My doctoral research and 22 years of industrial experience led me to a single conviction: Sustainable organizational performance begins with sustainable human capability."</div>
         <div class="conviction-ar">"قادني بحثي الدكتوري و22 عاماً من التجربة الصناعية إلى قناعة واحدة: الأداء المؤسسي المستدام يبدأ بالقدرة البشرية المستدامة."</div>
       </div>
@@ -1838,6 +1852,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   </div>
 </div>
 </section>
+
 <footer class="footer">
   <div>
     <div class="footer-brand">PETROKEMYA &middot; HUMAN CAPABILITY TRANSFORMATION SYSTEM</div>
@@ -1903,7 +1918,7 @@ function oscillateKPIs(){
 
 // Start oscillating after 3s, every 2.5s
 setTimeout(()=>{
-  setInterval(oscillateKPIs, 2500);
+  setInterval(oscillateKPIs, 1800);
 }, 3000);
 
 // ── ANIMATED COUNTER ON SCROLL (enhanced) ─────────────────────
@@ -2108,6 +2123,12 @@ function updateJubailClock(){
 }
 updateJubailClock();
 setInterval(updateJubailClock,1000);
+// Live year in topbar
+(function updateLiveYear(){
+  const el = document.getElementById('liveYear');
+  if(el) el.textContent = new Date().getFullYear();
+  setTimeout(updateLiveYear, 60000);
+})();
 
 
 // ── PROFILE VIDEO: click to open full modal with audio ──
