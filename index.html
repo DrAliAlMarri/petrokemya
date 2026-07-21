@@ -2072,12 +2072,23 @@ document.querySelectorAll('.found-card,.rm-card,.why-card,.mat-card,.bv-card,.ri
 
 // ── CHART.JS ──────────────────────────────────────────────
 const CYAN='#00D4FF',AMB='#F59E0B',GRN='#00FF88',PRP='#A855F7',RED='#FF4466';
-Chart.defaults.font.family="'IBM Plex Mono',monospace";
-Chart.defaults.color='#94A3B8';
 const grid='rgba(0,212,255,.07)';
+if(typeof Chart !== 'undefined'){
+  Chart.defaults.font.family="'IBM Plex Mono',monospace";
+  Chart.defaults.color='#94A3B8';
+}
+// Safe factory: never throw when a canvas is absent (a thrown error here
+// would halt the rest of this script, killing the video/audio + KPI code).
+function makeChart(id, cfg){
+  if(typeof Chart === 'undefined') return null;
+  var el = document.getElementById(id);
+  if(!el || el.tagName !== 'CANVAS') return null;
+  try { return new Chart(el, cfg); }
+  catch(err){ console.warn('[chart] skipped "'+id+'":', err && err.message); return null; }
+}
 
 // Radar 1 — Command Center
-new Chart(document.getElementById('radarChart'),{
+makeChart('radarChart',{
   type:'radar',
   data:{
     labels:['Leadership\n87%','Org. Support\n82%','Readiness\n78%','Knowledge\n76%','Innovation\n73%','Pipeline\n74%'],
@@ -2092,7 +2103,7 @@ new Chart(document.getElementById('radarChart'),{
 });
 
 // Radar 2 — Analytics
-new Chart(document.getElementById('radarChart2'),{
+makeChart('radarChart2',{
   type:'radar',
   data:{
     labels:['Leadership Trust','Org. Support','Workforce Readiness','Knowledge','Innovation','Pipeline'],
@@ -2107,7 +2118,7 @@ new Chart(document.getElementById('radarChart2'),{
 });
 
 // Mini Line Chart
-new Chart(document.getElementById('miniLineChart'),{
+makeChart('miniLineChart',{
   type:'line',
   data:{
     labels:['2023','2025','2026','2027','2028','2029','2030'],
@@ -2131,7 +2142,7 @@ const kpiSeries=[
   {l:'Green Creativity',c:RED,d:[45,52,60,68,75,80]},
   {l:'Pipeline',c:'#60A5FA',d:[40,50,60,70,80,85]},
 ];
-const lChart=new Chart(document.getElementById('lineChart'),{
+const lChart=makeChart('lineChart',{
   type:'line',
   data:{
     labels:['2023','2026','2027','2028','2029','2030'],
@@ -2145,8 +2156,10 @@ const lChart=new Chart(document.getElementById('lineChart'),{
 });
 document.querySelectorAll('#kpiToggles .tg-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
+    if(!lChart) return;
     btn.classList.toggle('on');
     const idx=+btn.dataset.idx;
+    if(!lChart.data.datasets[idx]) return;
     lChart.data.datasets[idx].hidden=!btn.classList.contains('on');
     lChart.update();
   });
@@ -2217,6 +2230,58 @@ if(document.readyState === 'loading'){
 }
 
 
+// (profile video + audio moved to its own <script> at end of body)
+
+
+
+</script>
+
+<script>
+/* ===== INDEPENDENT LIVE CLOCK + YEAR (standalone strategy) ===== */
+(function(){
+  function pad(n){ return String(n).padStart(2,'0'); }
+  var DAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  var MON=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+  function render(){
+    var now;
+    // Get Riyadh/AST time (UTC+3)
+    try {
+      now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Riyadh'}));
+    } catch(e){
+      now = new Date();
+    }
+    var yr = now.getFullYear();
+    var stamp = DAYS[now.getDay()]+' '+pad(now.getDate())+' '+MON[now.getMonth()]+' '+yr
+              +' \u00B7 '+pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds())+' AST';
+
+    var clk = document.getElementById('jubailClock');
+    if(clk){ clk.textContent = stamp; }
+
+    var y1 = document.getElementById('liveYear');
+    if(y1){ y1.textContent = yr; }
+    var y2 = document.getElementById('liveYear2');
+    if(y2){ y2.textContent = yr; }
+  }
+
+  function boot(){
+    render();
+    setInterval(render, 1000);
+  }
+
+  if(document.readyState === 'complete' || document.readyState === 'interactive'){
+    boot();
+  } else {
+    document.addEventListener('DOMContentLoaded', boot);
+  }
+  // extra safety: also fire after full load
+  window.addEventListener('load', render);
+})();
+</script>
+
+
+<script>
+/* ===== PROFILE VIDEO + AUDIO (isolated so no other error can stop it) ===== */
 // ── PROFILE VIDEO: real audio-track detection + scroll-into-view sound ──
 (function(){
   var wrap    = document.getElementById('videoWrap');
@@ -2370,52 +2435,6 @@ if(document.readyState === 'loading'){
   if(closeBtn) closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
 })();
-
-
 </script>
-
-<script>
-/* ===== INDEPENDENT LIVE CLOCK + YEAR (standalone strategy) ===== */
-(function(){
-  function pad(n){ return String(n).padStart(2,'0'); }
-  var DAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  var MON=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-
-  function render(){
-    var now;
-    // Get Riyadh/AST time (UTC+3)
-    try {
-      now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Riyadh'}));
-    } catch(e){
-      now = new Date();
-    }
-    var yr = now.getFullYear();
-    var stamp = DAYS[now.getDay()]+' '+pad(now.getDate())+' '+MON[now.getMonth()]+' '+yr
-              +' \u00B7 '+pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds())+' AST';
-
-    var clk = document.getElementById('jubailClock');
-    if(clk){ clk.textContent = stamp; }
-
-    var y1 = document.getElementById('liveYear');
-    if(y1){ y1.textContent = yr; }
-    var y2 = document.getElementById('liveYear2');
-    if(y2){ y2.textContent = yr; }
-  }
-
-  function boot(){
-    render();
-    setInterval(render, 1000);
-  }
-
-  if(document.readyState === 'complete' || document.readyState === 'interactive'){
-    boot();
-  } else {
-    document.addEventListener('DOMContentLoaded', boot);
-  }
-  // extra safety: also fire after full load
-  window.addEventListener('load', render);
-})();
-</script>
-
 </body>
 </html>
