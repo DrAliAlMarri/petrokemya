@@ -2217,7 +2217,7 @@ if(document.readyState === 'loading'){
 
   if(!vid || !wrap){ console.error(TAG,'ABORT — video or wrap missing'); return; }
 
-  var inView=false, modalOpen=false;
+  var inView=false, modalOpen=false, userWantsSound=false;  // sound only after the user clicks the speaker
 
   // Chrome/Edge expose whether the user has ever activated the document.
   // Attempting to unmute before that ALWAYS fails and pauses the video,
@@ -2263,18 +2263,15 @@ if(document.readyState === 'loading'){
         var now = e.isIntersecting && e.intersectionRatio>=0.4;
         if(now===inView) return;
         inView=now;
-        if(inView) soundOn('scrolled into view');
+        if(inView && userWantsSound) soundOn('scrolled back into view');
         else soundOff('scrolled out of view');
       });
     },{threshold:[0,0.4,1]}).observe(wrap);
   }
 
-  // ONLY real activation gestures can grant audio. Scroll/wheel cannot.
+  // Track activation only; sound is never turned on automatically.
   ['pointerup','click','touchend','keydown'].forEach(function(ev){
-    document.addEventListener(ev,function(){
-      activatedFallback=true;
-      if(inView && !modalOpen && vid.muted) soundOn('user gesture:'+ev);
-    },{passive:true});
+    document.addEventListener(ev,function(){ activatedFallback=true; },{passive:true});
   });
 
   // ---- Modal ----
@@ -2289,14 +2286,13 @@ if(document.readyState === 'loading'){
     modalOpen=false;
     if(overlay) overlay.style.display='none';
     if(mv){ mv.pause(); mv.currentTime=0; }
-    soundOn('modal closed');
+    if(userWantsSound) soundOn('modal closed');
   }
 
   wrap.addEventListener('click', openModal);
   wrap.addEventListener('mouseenter',function(){
     if(hint)hint.style.background='rgba(0,0,0,.35)';
     if(icon)icon.style.opacity='1';
-    soundOn('hover');
   });
   wrap.addEventListener('mouseleave',function(){
     if(hint)hint.style.background='rgba(0,0,0,0)';
@@ -2332,11 +2328,13 @@ if(document.readyState === 'loading'){
       e.stopPropagation();          // don't open the modal
       e.preventDefault();
       if(vid.muted){
+        userWantsSound = true;
         vid.muted = false;
         vid.volume = 1.0;
         vid.play().catch(function(err){ log('unmute refused:', err && err.name); });
         log('unmuted via button');
       } else {
+        userWantsSound = false;
         vid.muted = true;
         log('muted via button');
       }
