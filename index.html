@@ -1751,6 +1751,18 @@ canvas { filter: drop-shadow(0 0 2px rgba(0,212,255,.15)); }
             <source src="https://res.cloudinary.com/dwtlf9n49/video/upload/v1781326985/WhatsApp_Video_2026-06-13_at_7.42.28_AM_wcay0n.mp4" type="video/mp4">
             <source src="https://res.cloudinary.com/dwtlf9n49/video/upload/ac_aac/v1781326985/WhatsApp_Video_2026-06-13_at_7.42.28_AM_wcay0n.mp4" type="video/mp4">
           </video>
+          <button id="muteBtn" type="button" aria-label="Unmute video" title="Unmute"
+            style="position:absolute;right:10px;bottom:10px;z-index:5;width:38px;height:38px;border-radius:50%;
+                   border:1px solid var(--cyan);background:rgba(3,16,24,.85);color:var(--cyan);
+                   display:grid;place-items:center;cursor:pointer;padding:0;
+                   box-shadow:0 0 14px rgba(0,212,255,.45);backdrop-filter:blur(4px);
+                   transition:background .18s,transform .18s,box-shadow .18s;">
+            <svg id="muteIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <line x1="23" y1="9" x2="17" y2="15"></line>
+              <line x1="17" y1="9" x2="23" y2="15"></line>
+            </svg>
+          </button>
           <div id="videoPlayHint" style="position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;background:rgba(0,0,0,0);transition:background .2s;pointer-events:none;">
             <div id="videoPlayIcon" style="opacity:0;transition:opacity .2s;background:rgba(0,212,255,.9);border-radius:50%;width:48px;height:48px;display:grid;place-items:center;box-shadow:0 0 20px rgba(0,212,255,.5);">
               <svg width="16" height="18" viewBox="0 0 16 18" fill="white"><polygon points="0,0 16,9 0,18"/></svg>
@@ -2294,7 +2306,49 @@ if(document.readyState === 'loading'){
   if(closeBtn) closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
 
-  log('ready — audio starts at your first click/tap/keypress anywhere on the page');
+  // ---- Explicit unmute button (bottom-right of the video) ----
+  var muteBtn  = document.getElementById('muteBtn');
+  var muteIcon = document.getElementById('muteIcon');
+
+  var ICON_MUTED = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>'
+                 + '<line x1="23" y1="9" x2="17" y2="15"></line>'
+                 + '<line x1="17" y1="9" x2="23" y2="15"></line>';
+  var ICON_LOUD  = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>'
+                 + '<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>'
+                 + '<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>';
+
+  function paintBtn(){
+    if(!muteBtn || !muteIcon) return;
+    var on = !vid.muted;
+    muteIcon.innerHTML = on ? ICON_LOUD : ICON_MUTED;
+    muteBtn.style.background = on ? 'var(--cyan)' : 'rgba(3,16,24,.85)';
+    muteBtn.style.color      = on ? '#031018'     : 'var(--cyan)';
+    muteBtn.setAttribute('aria-label', on ? 'Mute video' : 'Unmute video');
+    muteBtn.title = on ? 'Mute' : 'Unmute';
+  }
+
+  if(muteBtn){
+    muteBtn.addEventListener('click', function(e){
+      e.stopPropagation();          // don't open the modal
+      e.preventDefault();
+      if(vid.muted){
+        vid.muted = false;
+        vid.volume = 1.0;
+        vid.play().catch(function(err){ log('unmute refused:', err && err.name); });
+        log('unmuted via button');
+      } else {
+        vid.muted = true;
+        log('muted via button');
+      }
+      setTimeout(paintBtn, 60);
+    });
+    muteBtn.addEventListener('mouseenter', function(){ muteBtn.style.transform='scale(1.12)'; });
+    muteBtn.addEventListener('mouseleave', function(){ muteBtn.style.transform='scale(1)'; });
+  }
+  vid.addEventListener('volumechange', paintBtn);
+  paintBtn();
+
+  log('ready — click the speaker button on the video for sound');
 })();
 </script>
 </body>
